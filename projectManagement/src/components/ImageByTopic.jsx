@@ -5,7 +5,7 @@ import 'primeicons/primeicons.css';
 
 const ImageByTopic = ({ topic }) => {
     const [imageUrl, setImageUrl] = useState('');
-    const API_KEY = 'My_Pexels_API_Key'; // Replace with my key- you can email me or get your own key from https://www.pexels.com/api/
+    const API_KEY = 'My_Pexels_API_Key'; // You can email me to replace with my key or get your own key from https://www.pexels.com/api/
     useEffect(() => {
         const fetchImage = async () => {
             try {
