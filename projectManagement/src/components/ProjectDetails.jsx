@@ -50,12 +50,6 @@ const ProjectDetails = () => {
         setMode('');
     };
 
-    const handleDelete = (taskId) => {
-        if (window.confirm("למחוק את המשימה לצמיתות?")) {
-            dispatch(deleteTask(taskId));
-        }
-    };
-
     return (
         <div className="h-screen w-screen overflow-hidden m-0 p-0"
             style={{
@@ -119,7 +113,7 @@ const ProjectDetails = () => {
                                                             }}
                                                         />
                                                         <Button icon="pi pi-trash" className="p-button-text p-button-rounded p-0 w-2rem h-2rem text-red-600"
-                                                            onClick={() => handleDelete(task.id)}
+                                                            onClick={() =>dispatch(deleteTask(task.id))}
                                                         />
                                                     </div>
                                                 </div>

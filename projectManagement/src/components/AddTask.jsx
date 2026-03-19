@@ -65,7 +65,6 @@ export default function AddTask() {
         return value >= today || "לא ניתן לבחור תאריך שעבר";
     };
 
-    // סגנון אחיד לשדות הקלט
     const inputStyle = {
         borderRadius: '12px',
         backgroundColor: 'rgba(255, 255, 255, 0.05)',
@@ -102,7 +101,6 @@ export default function AddTask() {
 
                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-column gap-4">
                     
-                    {/* שם משימה */}
                     <div className="flex flex-column gap-2">
                         <FloatLabel>
                             <InputText 
@@ -116,7 +114,6 @@ export default function AddTask() {
                         {errors.title && <small className="p-error mr-2">{errors.title.message}</small>}
                     </div>
 
-                    {/* תיאור משימה */}
                     <div className="flex flex-column gap-2">
                         <FloatLabel>
                             <InputText 
@@ -130,13 +127,11 @@ export default function AddTask() {
                         {errors.description && <small className="p-error mr-2">{errors.description.message}</small>}
                     </div>
 
-                    {/* עדיפות - Dropdown */}
                     <div className="flex flex-column gap-2">
                         <FloatLabel>
                             <Controller
                                 name="priority"
                                 control={control}
-                                rules={{ required: "חובה לבחור עדיפות" }}
                                 render={({ field, fieldState }) => (
                                     <Dropdown
                                         id={field.name}
@@ -161,7 +156,6 @@ export default function AddTask() {
                         {errors.priority && <small className="p-error mr-2">{errors.priority.message}</small>}
                     </div>
 
-                    {/* תאריך יעד - Calendar */}
                     <div className="flex flex-column gap-2">
                         <FloatLabel>
                             <Controller
@@ -186,7 +180,6 @@ export default function AddTask() {
                         {errors.dueDate && <small className="p-error mr-2">{errors.dueDate.message}</small>}
                     </div>
 
-                    {/* כפתורי פעולה */}
                     <div className="flex flex-column gap-3 mt-4">
                         <Button 
                             type="submit" 
@@ -201,7 +194,7 @@ export default function AddTask() {
   icon="pi pi-times"
   className="p-button-outlined p-button-secondary text-white border-round-lg shadow-2"
   style={{ backgroundColor: 'rgba(255, 255, 255, 0.05)' }}
-  onClick={() => navigate(`/projects/${id}`)}
+  onClick={() => navigate(`/project/${id}`)}
 />
                     </div>
                 </form>

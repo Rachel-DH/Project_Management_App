@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Card } from 'primereact/card'
 import { Button } from 'primereact/button'
 import { remove } from "../store/projectsSlice"
+import { deleteTask } from '../store/taskSlice'
 import { useState } from 'react'
 import { Calendar } from 'primereact/calendar';
 import { FloatLabel } from 'primereact/floatlabel';
@@ -15,6 +16,7 @@ const ProjectList = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const projects = useSelector((state) => state.projects.list)
+    const tasks = useSelector(state => state.tasks.list);
     const [editProjectId, setEditProjectId] = useState(null)
     const [updatedName, setUpdatedName] = useState('');
     const [updatedDate, setUpdatedDate] = useState(null);
@@ -33,7 +35,12 @@ const ProjectList = () => {
                 <Button
                     icon="pi pi-trash"
                     className="p-button-rounded p-button-danger p-button-text bg-white-alpha-20 hover:bg-white-alpha-40 transition-all"
-                    onClick={(e) => { e.stopPropagation(); dispatch(remove(project.id)); }}
+                    onClick={(e) => {
+                        e.stopPropagation(); dispatch(remove(project.id));
+                        tasks.filter(task => task.idProject === project.id).forEach(task => {
+                            dispatch(deleteTask(task.id))
+                        })
+                    }}
                     style={{ backdropFilter: 'blur(4px)', color: '#fefae0' }}
                 />
             </div>
@@ -112,80 +119,80 @@ const ProjectList = () => {
                             </Card>
                         </div>
                     ) : (
-                     <div key={project.id} className="col-12 md:col-6 lg:col-3 p-3">
-    <Card
-        header={cardHeader(project)}
-        className="shadow-4 border-none"
-        style={{
-            background: 'rgba(254, 250, 224, 0.08)',
-            backdropFilter: 'blur(12px)',
-            borderRadius: '12px',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            color: '#fefae0'
-        }}
-    >
-        <div className="flex flex-column gap-4 mt-2">
-            {/* שם פרויקט */}
-            <FloatLabel>
-                <InputText
-                    id="projectName"
-                    value={updatedName}
-                    onChange={(e) => setUpdatedName(e.target.value)}
-                    className="w-full bg-transparent border-none border-bottom-1 border-white-alpha-30 text-white focus:border-1 focus:border-round-xl transition-all outline-none p-2"
-                    style={{ boxShadow: 'none' }}
-                />
-                <label htmlFor="projectName" style={{ right: '0.5rem', left: 'auto', color: '#fefae0', opacity: 0.8 }}>שם פרויקט</label>
-            </FloatLabel>
+                        <div key={project.id} className="col-12 md:col-6 lg:col-3 p-3">
+                            <Card
+                                header={cardHeader(project)}
+                                className="shadow-4 border-none"
+                                style={{
+                                    background: 'rgba(254, 250, 224, 0.08)',
+                                    backdropFilter: 'blur(12px)',
+                                    borderRadius: '12px',
+                                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                                    color: '#fefae0'
+                                }}
+                            >
+                                <div className="flex flex-column gap-4 mt-2">
+                                    {/* שם פרויקט */}
+                                    <FloatLabel>
+                                        <InputText
+                                            id="projectName"
+                                            value={updatedName}
+                                            onChange={(e) => setUpdatedName(e.target.value)}
+                                            className="w-full bg-transparent border-none border-bottom-1 border-white-alpha-30 text-white focus:border-1 focus:border-round-xl transition-all outline-none p-2"
+                                            style={{ boxShadow: 'none' }}
+                                        />
+                                        <label htmlFor="projectName" style={{ right: '0.5rem', left: 'auto', color: '#fefae0', opacity: 0.8 }}>שם פרויקט</label>
+                                    </FloatLabel>
 
-            {/* תאריך יצירה - תיקון הכפתור הלבן */}
-            <FloatLabel>
-                <Calendar
-                    id="createDate"
-                    value={updatedDate ? new Date(updatedDate) : null}
-                    onChange={(e) => setUpdatedDate(e.value)}
-                    showIcon
-                    dateFormat="dd/mm/yy"
-                    className="w-full"
-                    inputClassName="bg-transparent border-none border-bottom-1 border-white-alpha-30 text-white focus:border-1 focus:border-round-xl transition-all outline-none p-2"
-                    // כאן אנחנו צובעים את הכפתור של הלוח שנה
-                    buttonClassName="bg-white-alpha-10 border-none text-white hover:bg-white-alpha-20" 
-                    style={{ boxShadow: 'none' }}
-                />
-                <label htmlFor="createDate" style={{ right: '0.5rem', left: 'auto', color: '#fefae0', opacity: 0.8 }}>תאריך יצירה</label>
-            </FloatLabel>
+                                    {/* תאריך יצירה - תיקון הכפתור הלבן */}
+                                    <FloatLabel>
+                                        <Calendar
+                                            id="createDate"
+                                            value={updatedDate ? new Date(updatedDate) : null}
+                                            onChange={(e) => setUpdatedDate(e.value)}
+                                            showIcon
+                                            dateFormat="dd/mm/yy"
+                                            className="w-full"
+                                            inputClassName="bg-transparent border-none border-bottom-1 border-white-alpha-30 text-white focus:border-1 focus:border-round-xl transition-all outline-none p-2"
+                                            // כאן אנחנו צובעים את הכפתור של הלוח שנה
+                                            buttonClassName="bg-white-alpha-10 border-none text-white hover:bg-white-alpha-20"
+                                            style={{ boxShadow: 'none' }}
+                                        />
+                                        <label htmlFor="createDate" style={{ right: '0.5rem', left: 'auto', color: '#fefae0', opacity: 0.8 }}>תאריך יצירה</label>
+                                    </FloatLabel>
 
-            {/* תיאור פרויקט */}
-            <FloatLabel>
-                <InputText
-                    id="description"
-                    value={updatedDescription}
-                    onChange={(e) => setUpdatedDescription(e.target.value)}
-                    className="w-full bg-transparent border-none border-bottom-1 border-white-alpha-30 text-white focus:border-1 focus:border-round-xl transition-all outline-none p-2"
-                    style={{ boxShadow: 'none' }}
-                />
-                <label htmlFor="description" style={{ right: '0.5rem', left: 'auto', color: '#fefae0', opacity: 0.8 }}>תיאור פרויקט</label>
-            </FloatLabel>
+                                    {/* תיאור פרויקט */}
+                                    <FloatLabel>
+                                        <InputText
+                                            id="description"
+                                            value={updatedDescription}
+                                            onChange={(e) => setUpdatedDescription(e.target.value)}
+                                            className="w-full bg-transparent border-none border-bottom-1 border-white-alpha-30 text-white focus:border-1 focus:border-round-xl transition-all outline-none p-2"
+                                            style={{ boxShadow: 'none' }}
+                                        />
+                                        <label htmlFor="description" style={{ right: '0.5rem', left: 'auto', color: '#fefae0', opacity: 0.8 }}>תיאור פרויקט</label>
+                                    </FloatLabel>
 
-            <div className="mt-2 flex justify-content-center gap-2">
-                <Button
-                    label="שמור"
-                    icon="pi pi-check"
-                    className="p-button-sm border-round-pill flex-grow-1 border-none"
-                    style={{ backgroundColor: '#606c38', color: '#fefae0' }}
-                    onClick={handleUpdate}
-                />
-                <Button
-                    label="ביטול"
-                    icon="pi pi-times"
-                    // שינוי קריטי: הוספת p-button-plain וסטייל ידני לצבע
-                    className="p-button-sm border-round-pill p-button-text p-button-plain border-none"
-                    style={{ color: '#dda15e', backgroundColor: 'transparent' }} 
-                    onClick={() => setEditProjectId(null)}
-                />
-            </div>
-        </div>
-    </Card>
-</div>
+                                    <div className="mt-2 flex justify-content-center gap-2">
+                                        <Button
+                                            label="שמור"
+                                            icon="pi pi-check"
+                                            className="p-button-sm border-round-pill flex-grow-1 border-none"
+                                            style={{ backgroundColor: '#606c38', color: '#fefae0' }}
+                                            onClick={handleUpdate}
+                                        />
+                                        <Button
+                                            label="ביטול"
+                                            icon="pi pi-times"
+                                            // שינוי קריטי: הוספת p-button-plain וסטייל ידני לצבע
+                                            className="p-button-sm border-round-pill p-button-text p-button-plain border-none"
+                                            style={{ color: '#dda15e', backgroundColor: 'transparent' }}
+                                            onClick={() => setEditProjectId(null)}
+                                        />
+                                    </div>
+                                </div>
+                            </Card>
+                        </div>
                     )
                 ))}
             </div>
